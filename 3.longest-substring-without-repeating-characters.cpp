@@ -5,34 +5,22 @@
  */
 
 // @lc code=start
-#include <map>
+#include <vector>
 #include <string>
-#include <iostream>
 class Solution {
 public:
     int lengthOfLongestSubstring(std::string s) {
         int res = 0;
-        std::map<char, int> dict;
-        int count = 0;
-        int begin = 0;
-        int i = 0;
-        for (i = 0; i < s.length(); i++) {
-            char c = s[i];
-            if (dict.count(c) == 1 && dict[c] >= begin) {
-                begin = (dict[c] + 1 > begin)? dict[c] + 1: begin + 1;
-                count = i - begin + 1;  
+        std::vector<int> dict(256, -1);
+        int begin = -1;
+        for (int i = 0; i < s.length(); i++) {
+            if (dict[s[i]] > begin) {
+                begin = dict[s[i]];
             }
-            else {
-                count += 1;
-            }
-            res = (count > res)? count: res;            
-            dict[c] = i;
-            if (res >= count + s.length() - i) {
-                break;
-            }
+            res = ((i - begin) > res)? i - begin: res;            
+            dict[s[i]] = i;
         }
         return res;
-        
     }
 };
 // @lc code=end
